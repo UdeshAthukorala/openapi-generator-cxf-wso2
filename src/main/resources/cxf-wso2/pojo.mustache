@@ -3,21 +3,17 @@ import java.util.Objects;
 import javax.validation.Valid;
 import javax.xml.bind.annotation.*;
 {{#description}}@ApiModel(description = "{{{description}}}"){{/description}}{{#discriminator}}{{>typeInfoAnnotation}}{{/discriminator}}
-public class {{classname}} {{#parent}}extends {{{parent}}}{{/parent}} {{#vendorExtensions.x-implements}}{{#-first}}implements {{{.}}}{{/-first}}{{^-first}}, {{{.}}}{{/-first}}{{/vendorExtensions.x-implements}}{{#serializableModel}}{{#vendorExtensions.x-implements}}, {{/vendorExtensions.x-implements}}{{^vendorExtensions.x-implements}}implements {{/vendorExtensions.x-implements}}Serializable{{/serializableModel}}{
+public class {{classname}} {{#parent}}extends {{{parent}}}{{/parent}} {{#serializableModel}}implements Serializable{{/serializableModel}}{
   {{#vars}}{{#isEnum}}{{^isContainer}}
 
 {{>enumClass}}{{/isContainer}}{{#isContainer}}{{#mostInnerItems}}
 
 {{>enumClass}}{{/mostInnerItems}}{{/isContainer}}{{/isEnum}}
-{{#isArray}}
-    private List<{{{items.datatypeWithEnum}}}> {{name}}{{#required}} = {{{defaultValue}}}{{/required}}{{^required}} = null{{/required}};
-{{/isArray}}
-{{^isArray}}
 {{#isContainer}}
     private {{{datatypeWithEnum}}} {{name}}{{#required}} = {{{defaultValue}}}{{/required}}{{^required}} = null{{/required}};
 {{/isContainer}}
 {{^isContainer}}
-    private {{{datatypeWithEnum}}} {{name}}{{#defaultValue}} = {{{.}}}{{/defaultValue}};{{/isContainer}}{{/isArray}}{{/vars}}
+    private {{{datatypeWithEnum}}} {{name}}{{#defaultValue}} = {{{.}}}{{/defaultValue}};{{/isContainer}}{{/vars}}
 
     {{#vars}}
     /**
@@ -31,43 +27,24 @@ public class {{classname}} {{#parent}}extends {{{parent}}}{{/parent}} {{#vendorE
     * maximum: {{maximum}}
     {{/maximum}}
     **/
-    {{#isArray}}
-    public {{classname}} {{name}}(List<{{{items.datatypeWithEnum}}}> {{name}}) {
-
-        this.{{name}} = {{name}};
-        return this;
-    }
-    {{/isArray}}
-    {{^isArray}}
     public {{classname}} {{name}}({{{datatypeWithEnum}}} {{name}}) {
 
         this.{{name}} = {{name}};
         return this;
     }
-    {{/isArray}}
     {{#vendorExtensions.extraAnnotation}}{{{vendorExtensions.extraAnnotation}}}{{/vendorExtensions.extraAnnotation}}
     @ApiModelProperty({{#example}}example = "{{{example}}}", {{/example}}{{#required}}required = {{required}}, {{/required}}value = "{{{description}}}")
     @JsonProperty("{{baseName}}"){{#useBeanValidation}}
     {{>beanValidation}}{{/useBeanValidation}}
-    {{#isArray}}
-    public List<{{{items.datatypeWithEnum}}}> {{getter}}() {
-        return {{name}};
-    }
-    public void {{setter}}(List<{{{items.datatypeWithEnum}}}> {{name}}) {
-        this.{{name}} = {{name}};
-    }
-    {{/isArray}}
-    {{^isArray}}
     public {{{datatypeWithEnum}}} {{getter}}() {
         return {{name}};
     }
     public void {{setter}}({{{datatypeWithEnum}}} {{name}}) {
         this.{{name}} = {{name}};
     }
-    {{/isArray}}
 
-    {{#isArray}}
-    public {{classname}} add{{nameInPascalCase}}Item({{{items.datatypeWithEnum}}} {{name}}Item) {
+    {{#isListContainer}}
+    public {{classname}} add{{nameInCamelCase}}Item({{{items.datatypeWithEnum}}} {{name}}Item) {
     {{^required}}
         if (this.{{name}} == null) {
             this.{{name}} = {{{defaultValue}}};
@@ -77,7 +54,7 @@ public class {{classname}} {{#parent}}extends {{{parent}}}{{/parent}} {{#vendorE
         return this;
     }
 
-    {{/isArray}}{{#isMapContainer}}
+    {{/isListContainer}}{{#isMapContainer}}
     public {{classname}} put{{nameInCamelCase}}Item(String key, {{{items.datatypeWithEnum}}} {{name}}Item) {
     {{^required}}
         if (this.{{name}} == null) {
@@ -104,14 +81,14 @@ public class {{classname}} {{#parent}}extends {{{parent}}}{{/parent}} {{#vendorE
         }
         {{/parent}}{{#hasVars}}
         {{classname}} {{classVarName}} = ({{classname}}) o;
-        return {{#vars}}Objects.equals(this.{{name}}, {{classVarName}}.{{name}}){{^-last}} &&
-            {{/-last}}{{/vars}};{{/hasVars}}{{^hasVars}}
+        return {{#vars}}Objects.equals(this.{{name}}, {{classVarName}}.{{name}}){{#hasMore}} &&
+            {{/hasMore}}{{^hasMore}};{{/hasMore}}{{/vars}}{{/hasVars}}{{^hasVars}}
         return true;{{/hasVars}}
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash({{#vars}}{{name}}{{^-last}}, {{/-last}}{{/vars}});
+        return Objects.hash({{#vars}}{{name}}{{#hasMore}}, {{/hasMore}}{{/vars}});
     }
 
     @Override
