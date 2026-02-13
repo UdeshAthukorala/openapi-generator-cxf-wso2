@@ -37,7 +37,7 @@ import javax.ws.rs.core.Response;
 public interface {{classname}}Service {
   {{#operation}}
 
-      public Response {{nickname}}({{#x-gen-include-req-res}}HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, {{/x-gen-include-req-res}}{{#allParams}}{{>serviceQueryParams}}{{>servicePathParams}}{{>serviceHeaderParams}}{{>serviceBodyParams}}{{>serviceFormParams}}{{^-last}}, {{/-last}}{{/allParams}});
+      public Response {{nickname}}({{#x-gen-include-req-res}}HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, {{/x-gen-include-req-res}}{{#allParams}}{{>serviceQueryParams}}{{>servicePathParams}}{{>serviceHeaderParams}}{{>serviceBodyParams}}{{>serviceFormParams}}{{#hasMore}}, {{/hasMore}}{{/allParams}});
   {{/operation}}
 }
 {{/operations}}

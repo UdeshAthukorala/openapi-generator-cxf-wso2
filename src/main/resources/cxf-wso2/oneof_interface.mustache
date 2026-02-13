@@ -1,9 +1,0 @@
-{{#description}}@ApiModel(description = "{{{description}}}"){{/description}}
-@com.fasterxml.jackson.annotation.JsonSubTypes({
-{{#oneOf}}
-  @com.fasterxml.jackson.annotation.JsonSubTypes.Type(value = {{{.}}}.class){{^-last}},{{/-last}}
-{{/oneOf}}
-})
-@com.fasterxml.jackson.annotation.JsonTypeInfo(use = com.fasterxml.jackson.annotation.JsonTypeInfo.Id.DEDUCTION)
-public interface {{classname}} {
-}

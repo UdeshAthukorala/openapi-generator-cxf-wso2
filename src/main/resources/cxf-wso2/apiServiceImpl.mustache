@@ -33,7 +33,7 @@ public class {{classname}}ServiceImpl implements {{classname}}Service {
     {{#operation}}
 
     @Override
-    public Response {{nickname}}({{#x-gen-include-req-res}}HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, {{/x-gen-include-req-res}}{{#allParams}}{{>serviceQueryParams}}{{>servicePathParams}}{{>serviceHeaderParams}}{{>serviceBodyParams}}{{>serviceFormParams}}{{^-last}}, {{/-last}}{{/allParams}}) {
+    public Response {{nickname}}({{#x-gen-include-req-res}}HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, {{/x-gen-include-req-res}}{{#allParams}}{{>serviceQueryParams}}{{>servicePathParams}}{{>serviceHeaderParams}}{{>serviceBodyParams}}{{>serviceFormParams}}{{#hasMore}}, {{/hasMore}}{{/allParams}}) {
 
         // do some magic!
         return Response.ok().entity("magic!").build();
